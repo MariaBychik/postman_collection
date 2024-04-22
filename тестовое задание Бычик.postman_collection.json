@@ -1,0 +1,1795 @@
+{
+	"info": {
+		"_postman_id": "3f643ca6-efa7-467b-bccb-b874ad1afc23",
+		"name": "тестовое задание Бычик",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19386446"
+	},
+	"item": [
+		{
+			"name": "Ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test(\"Статус код 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//Проверка на содержание в теле ответа \"Created\"\r",
+							"pm.test(\"API запущен и работает\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Created\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/ping",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBookingIds (ALLids)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка на соответствие параметров типу данных\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Параметры ответа корректны и содержат соответствующий тип данных\", () => {\r",
+							"pm.expect(jsonData).to.be.an('array'); //Проверяем, является ли тело ответа массивом\r",
+							"pm.expect(jsonData.length).to.be.above(0); // Проверяем, содержит ли массив хотя бы один объект\r",
+							"for (var i = 0; i < jsonData.length; i++) {\r",
+							"pm.expect(jsonData[i]).to.have.property('bookingid');//Проверяем, что каждый объект содержит bookingid \r",
+							"pm.expect(jsonData[i].bookingid).to.be.a('number');//Проверка, что bookingid  является числом\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"    \r",
+							"\r",
+							"    \r",
+							"    \r",
+							"\r",
+							"    \r",
+							"    "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/booking",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBookingIds (Filter by name)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Проверка статуса кода в зависимости от наличия пользователя\", function () {\r",
+							"    var name = pm.response.json().firstname;\r",
+							"    var surname = pm.response.json().lastname;\r",
+							"    if (name === \"John\" && surname === \"Allen\") {\r",
+							"        console.log(\"User was found\");\r",
+							"        // Если имя и фамилия равны желаемым значениям, ожидаем статус код 200\r",
+							"        pm.response.to.have.status(200);\r",
+							"    } else {\r",
+							"        console.log(\"User wasn't found\");\r",
+							"        // Если имя и фамилия не равны желаемым значениям, ожидаем статус код 404\r",
+							"        pm.response.to.have.status(404);\r",
+							"    }\r",
+							"    });\r",
+							"\r",
+							"\r",
+							"//Проверка на соответствие параметров типу данных\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Параметры ответа корректны и содержат соответствующий тип данных\", () => {\r",
+							"pm.expect(jsonData).to.be.an('array'); //Проверяем, является ли тело ответа массивом\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"    \r",
+							"\r",
+							"    \r",
+							"    \r",
+							"\r",
+							"    \r",
+							"    "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/booking?firstname={{firstname}}&lastname={{lastname}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking"
+					],
+					"query": [
+						{
+							"key": "firstname",
+							"value": "{{firstname}}"
+						},
+						{
+							"key": "lastname",
+							"value": "{{lastname}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBookingIds (Filter by checkin/checkout date)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Код состояния не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Проверка на соответствие параметров типу данных\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.test(\"Параметры ответа корректны и содержат соответствующий тип данных\", () => {\r",
+							"pm.expect(jsonData).to.be.an('array'); //Проверяем, является ли тело ответа массивом\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"    \r",
+							"\r",
+							"    \r",
+							"    \r",
+							"\r",
+							"    \r",
+							"    "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/booking?checkin={{checkin}}&checkout={{checkout}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking"
+					],
+					"query": [
+						{
+							"key": "checkin",
+							"value": "{{checkin}}"
+						},
+						{
+							"key": "checkout",
+							"value": "{{checkout}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBooking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});\r",
+							"\r",
+							"//Проверка на корректность типов данных   \r",
+							"pm.test(\"Параметры ответа корректны и содержат соответствующий тип данных\", () => {\r",
+							"  var jsonResponse = pm.response.json();\r",
+							"  pm.expect(jsonResponse).to.be.an('object');\r",
+							"  pm.expect(jsonResponse.firstname).to.be.a('string');\r",
+							"  pm.expect(jsonResponse.lastname).to.be.a('string');\r",
+							"  pm.expect(jsonResponse.totalprice).to.be.a('number');\r",
+							"  pm.expect(jsonResponse.depositpaid).to.be.a('boolean');\r",
+							"  pm.expect(jsonResponse.bookingdates).to.be.an('object');\r",
+							"  pm.expect(new Date(jsonResponse.bookingdates.checkin)).to.be.a('Date');\r",
+							"  pm.expect(new Date(jsonResponse.bookingdates.checkout)).to.be.a('Date');\r",
+							"  pm.expect(jsonResponse.additionalneeds).to.be.an('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/booking/355",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"355"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"",
+							"//Проверка на корректность статус кода",
+							"pm.test('Статус код 200, bookingid присвоен', function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse).to.have.property('bookingid');",
+							"})",
+							"",
+							"//Проверка наличия заголовка в ответе",
+							"pm.test('Header Content-Type существует', function () {",
+							"    pm.response.to.have.header('Content-Type');",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"})",
+							"",
+							"//Проверка на пустые значения",
+							"pm.test('Проверка полей на пустые значения', function () {",
+							"    pm.expect(pm.request.body.firstname).to.not.eql(null);",
+							"    pm.expect(pm.request.body.lastname).to.not.eql(null);",
+							"    pm.expect(pm.request.body.totalprice).to.not.eql(null);",
+							"    pm.expect(pm.request.body.bookingdates).to.not.eql(null);",
+							"    pm.expect(pm.request.body.additionalneeds).to.not.eql(null);",
+							"})",
+							"",
+							"//Проверка на соответствие параметров типу данных",
+							"pm.test('Параметры ответа корректны и содержат соответствующий тип данных', () => {",
+							"    pm.expect(jsonResponse).to.be.an('object');",
+							"    pm.expect(jsonResponse.bookingid).to.be.an('number');",
+							"    pm.expect(jsonResponse.booking).to.be.an('object');",
+							"    pm.expect(jsonResponse.booking.firstname).to.be.a('string');",
+							"    pm.expect(jsonResponse.booking.lastname).to.be.a('string');",
+							"    pm.expect(jsonResponse.booking.totalprice).to.be.a('number');",
+							"    pm.expect(jsonResponse.booking.depositpaid).to.be.a('boolean');",
+							"    pm.expect(jsonResponse.booking.bookingdates).to.be.an('object');",
+							"    pm.expect(new Date(jsonResponse.booking.bookingdates.checkin)).to.be.a('Date');",
+							"    pm.expect(new Date(jsonResponse.booking.bookingdates.checkout)).to.be.a('Date');",
+							"    pm.expect(jsonResponse.booking.additionalneeds).to.be.an('string');",
+							"})",
+							"",
+							"//Корректность формата данных",
+							"pm.test(\"Проверка формата дат\", function () {",
+							"  pm.expect(jsonResponse.booking.bookingdates.checkin).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"  pm.expect(jsonResponse.booking.bookingdates.checkout).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"  pm.expect(jsonResponse.booking.bookingdates.checkin < jsonResponse.booking.bookingdates.checkout);",
+							"});",
+							"",
+							"//Сохранение созданной id в переменной коллекции для последующей передачи в запросах",
+							"pm.collectionVariables.set('new_id', jsonResponse.bookingid)",
+							"//Сохранение созданной id в переменной окружения для последующей передачи в запросах",
+							"pm.environment.set('new_id', jsonResponse.bookingid)",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"pm.environment.set(\"firstname\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"pm.environment.set(\"lastname\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"pm.environment.set(\"totalprice\", pm.variables.replaceIn(\"{{$randomPrice}}\"));\r",
+							"pm.environment.set(\"depositpaid\", pm.variables.replaceIn(\"{{$randomBoolean}}\"));\r",
+							"pm.environment.set(\"checkin\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"checkout\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"additionalneeds\", pm.variables.replaceIn(\"{{$randomProduct}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstname\": \"{{firstname}}\",\r\n        \"lastname\": \"{{lastname}}\",\r\n        \"totalprice\": {{totalprice}},\r\n        \"depositpaid\": {{depositpaid}},\r\n        \"bookingdates\": {\r\n            \"checkin\": \"{{checkin}}\", \r\n            \"checkout\": \"{{checkout}}\"\r\n        \r\n        },\r\n        \"additionalneeds\": \"{{additionalneeds}}\"\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/booking",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBooking_id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода",
+							"pm.test('Статус код 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"// Проверка неожиданных кодов состояния ",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; ",
+							"errorStatusCodes.forEach(function (statusCode) { ",
+							"    pm.test(`Статус код не ${statusCode}`, function () { ",
+							"        pm.response.to.not.have.status(statusCode); });",
+							"});",
+							"",
+							"//Проверка на корректность типов данных   ",
+							"pm.test(\"Параметры ответа корректны и содержат соответствующий тип данных\", () => {",
+							"  var jsonResponse = pm.response.json();",
+							"  pm.expect(jsonResponse).to.be.an('object');",
+							"  pm.expect(jsonResponse.firstname).to.be.a('string');",
+							"  pm.expect(jsonResponse.lastname).to.be.a('string');",
+							"  pm.expect(jsonResponse.totalprice).to.be.a('number');",
+							"  pm.expect(jsonResponse.depositpaid).to.be.a('boolean');",
+							"  pm.expect(jsonResponse.bookingdates).to.be.an('object');",
+							"  pm.expect(new Date(jsonResponse.bookingdates.checkin)).to.be.a('Date');",
+							"  pm.expect(new Date(jsonResponse.bookingdates.checkout)).to.be.a('Date');",
+							"  pm.expect(jsonResponse.additionalneeds).to.be.an('string');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/booking/{{new_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test(\"Статус код 200\", function () {\r",
+							"pm.response.to.have.status(200) \r",
+							"});\r",
+							"\r",
+							"//Сохранение актуального токена в переменную коллекции\r",
+							"var jsonData = pm.response.json(); \r",
+							"var token = jsonData.token; \r",
+							"pm.collectionVariables.set(\"actual_token\", token); \r",
+							"\r",
+							"//Сохранение актуального токена в переменную окружения\r",
+							"var jsonData = pm.response.json(); \r",
+							"var token = jsonData.token; \r",
+							"pm.environment.set(\"actual_token\", token); "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/auth",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"pm.environment.set(\"firstname\", \"Maria\");\r",
+							"pm.environment.set(\"lastname\", \"Bychik\");\r",
+							"pm.environment.set(\"totalprice\", 100);\r",
+							"pm.environment.set(\"depositpaid\", true);\r",
+							"pm.environment.set(\"checkin\", \"2024-05-22\");\r",
+							"pm.environment.set(\"checkout\", \"2024-05-22\");\r",
+							"pm.environment.set(\"additionalneeds\", \"Lunch\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"{{firstname}}\",\r\n    \"lastname\": \"{{lastname}}\",\r\n    \"totalprice\": {{totalprice}},\r\n    \"depositpaid\": {{depositpaid}},\r\n    \"bookingdates\": {\r\n        \"checkin\": \"{{checkin}}\",\r\n        \"checkout\": \"{{checkout}}\"\r\n    },\r\n    \"additionalneeds\": \"{{additionalneeds}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/booking/{{new_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PartialUpdateBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastname\" : \"Ivanova\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/booking/{{new_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 201', function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/booking/{{new_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBooking (XML)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"pm.environment.set(\"firstname_xml\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"pm.environment.set(\"lastname_xml\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"pm.environment.set(\"totalprice_xml\", pm.variables.replaceIn(\"{{$randomPrice}}\"));\r",
+							"pm.environment.set(\"depositpaid_xml\", pm.variables.replaceIn(\"{{$randomBoolean}}\"));\r",
+							"pm.environment.set(\"checkin_xml\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"checkout_xml\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"additionalneeds_xml\", pm.variables.replaceIn(\"{{$randomProduct}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка корректного статус кода\r",
+							"pm.test(\"Статус код 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Сохранение созданной id в переменную окружения для последующей передачи в запросах\r",
+							"// Преобразование XML в JSON\r",
+							"var xmlResponse = pm.response.text();\r",
+							"console.log(\"XML Response:\", xmlResponse);\r",
+							"var jsonData = xml2Json(xmlResponse);\r",
+							"console.log(\"JSON Data:\", jsonData); \r",
+							"// Извлечение необходимого значения из JSON\r",
+							"var createdBooking = jsonData[\"created-booking\"];\r",
+							"var newValue = createdBooking.bookingid;\r",
+							"pm.environment.set(\"new_id_xml\", newValue);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<booking>\r\n    <firstname>{{firstname_xml}}</firstname>\r\n    <lastname>{{lastname_xml}}</lastname>\r\n    <totalprice>{{totalprice_xml}}</totalprice>\r\n    <depositpaid>{{depositpaid_xml}}</depositpaid>\r\n    <bookingdates>\r\n      <checkin>{{checkin_xml}}</checkin>\r\n      <checkout>{{checkout_xml}}</checkout>\r\n    </bookingdates>\r\n    <additionalneeds>{{additionalneeds_xml}}</additionalneeds>\r\n  </booking>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBooking_id (XML)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода",
+							"pm.test('Статус код 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"// Проверка неожиданных кодов состояния ",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; ",
+							"errorStatusCodes.forEach(function (statusCode) { ",
+							"    pm.test(`Статус код не ${statusCode}`, function () { ",
+							"        pm.response.to.not.have.status(statusCode); });",
+							"});",
+							"",
+							"//Проверка наличия заголовка в ответе",
+							"pm.test('Header Content-Type text/html существует', function () {",
+							"    pm.response.to.have.header('Content-Type');",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html');",
+							"})",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/booking/{{new_id_xml}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id_xml}}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBooking (XML)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"pm.environment.set(\"firstname_xml\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"pm.environment.set(\"lastname_xml\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"pm.environment.set(\"totalprice_xml\", pm.variables.replaceIn(\"{{$randomPrice}}\"));\r",
+							"pm.environment.set(\"depositpaid_xml\", pm.variables.replaceIn(\"{{$randomBoolean}}\"));\r",
+							"pm.environment.set(\"checkin_xml\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"checkout_xml\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"additionalneeds_xml\", pm.variables.replaceIn(\"{{$randomProduct}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<booking>\r\n    <firstname>{{firstname_xml}}</firstname>\r\n    <lastname>{{lastname_xml}}</lastname>\r\n    <totalprice>{{totalprice_xml}}</totalprice>\r\n    <depositpaid>{{depositpaid_xml}}</depositpaid>\r\n    <bookingdates>\r\n      <checkin>{{checkin_xml}}</checkin>\r\n      <checkout>{{checkout_xml}}</checkout>\r\n    </bookingdates>\r\n    <additionalneeds>{{additionalneeds_xml}}</additionalneeds>\r\n  </booking>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{new_id_xml}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{new_id_xml}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PartialUpdateBooking (XML)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"pm.environment.set(\"checkin_xml\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"checkout_xml\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"))\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка корректного статус кода\r",
+							"pm.test(\"Статус код 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<booking>\r\n    <bookingdates>\r\n      <checkin>{{checkin_xml}}</checkin>\r\n      <checkout>{{checkout_xml}}</checkout>\r\n    </bookingdates>\r\n  </booking>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{new_id_xml}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{new_id_xml}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBooking (XML)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 201', function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{new_id_xml}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{new_id_xml}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBooking (URL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();",
+							"",
+							"//Проверка на корректность статус кода",
+							"pm.test('Статус код 200, bookingid присвоен', function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonResponse).to.have.property('bookingid');",
+							"})",
+							"",
+							"//Проверка наличия заголовка в ответе",
+							"pm.test('Header Content-Type существует', function () {",
+							"    pm.response.to.have.header('Content-Type');",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"})",
+							"",
+							"//Проверка на пустые значения",
+							"pm.test('Проверка полей на пустые значения', function () {",
+							"    pm.expect(pm.request.body.firstname).to.not.eql(null);",
+							"    pm.expect(pm.request.body.lastname).to.not.eql(null);",
+							"    pm.expect(pm.request.body.totalprice).to.not.eql(null);",
+							"    pm.expect(pm.request.body.bookingdates).to.not.eql(null);",
+							"    pm.expect(pm.request.body.additionalneeds).to.not.eql(null);",
+							"})",
+							"",
+							"//Проверка на соответствие параметров типу данных",
+							"pm.test('Параметры ответа корректны и содержат соответствующий тип данных', () => {",
+							"    pm.expect(jsonResponse).to.be.an('object');",
+							"    pm.expect(jsonResponse.bookingid).to.be.an('number');",
+							"    pm.expect(jsonResponse.booking).to.be.an('object');",
+							"    pm.expect(jsonResponse.booking.firstname).to.be.a('string');",
+							"    pm.expect(jsonResponse.booking.lastname).to.be.a('string');",
+							"    pm.expect(jsonResponse.booking.totalprice).to.be.a('number');",
+							"    pm.expect(jsonResponse.booking.depositpaid).to.be.a('boolean');",
+							"    pm.expect(jsonResponse.booking.bookingdates).to.be.an('object');",
+							"    pm.expect(new Date(jsonResponse.booking.bookingdates.checkin)).to.be.a('Date');",
+							"    pm.expect(new Date(jsonResponse.booking.bookingdates.checkout)).to.be.a('Date');",
+							"    pm.expect(jsonResponse.booking.additionalneeds).to.be.an('string');",
+							"})",
+							"",
+							"//Корректность формата данных",
+							"pm.test(\"Проверка формата дат\", function () {",
+							"  pm.expect(jsonResponse.booking.bookingdates.checkin).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"  pm.expect(jsonResponse.booking.bookingdates.checkout).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"  pm.expect(jsonResponse.booking.bookingdates.checkin < jsonResponse.booking.bookingdates.checkout);",
+							"});",
+							"",
+							"//Сохранение созданной id в переменной коллекции для последующей передачи в запросах",
+							"pm.collectionVariables.set('new_id_url', jsonResponse.bookingid)",
+							"//Сохранение созданной id в переменной окружения для последующей передачи в запросах",
+							"pm.environment.set('new_id_url', jsonResponse.bookingid)",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"pm.environment.set(\"firstname_url\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"pm.environment.set(\"lastname_url\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"pm.environment.set(\"totalprice_url\", pm.variables.replaceIn(\"{{$randomPrice}}\"));\r",
+							"pm.environment.set(\"depositpaid_url\", pm.variables.replaceIn(\"{{$randomBoolean}}\"));\r",
+							"pm.environment.set(\"checkin_url\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"checkout_url\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"additionalneeds_url\", pm.variables.replaceIn(\"{{$randomProduct}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"description": "передаю application/json тк формат payload не предполагает использование application/x-www-form-urlencoded (только application/json or text/xml)"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"description": "аналогично и с форматом response body (application/json или application/xml)"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstname",
+							"value": "{{firstname_url}}",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "{{lastname_url}}",
+							"type": "text"
+						},
+						{
+							"key": "totalprice",
+							"value": "{{totalprice_url}}",
+							"type": "text"
+						},
+						{
+							"key": "depositpaid",
+							"value": "{{depositpaid_url}}",
+							"type": "text"
+						},
+						{
+							"key": "bookingdates[checkin]",
+							"value": "{{checkin_url}}",
+							"type": "text"
+						},
+						{
+							"key": "bookingdates[checkout]",
+							"value": "{{checkout_url}}",
+							"type": "text"
+						},
+						{
+							"key": "additionalneeds",
+							"value": "{{additionalneeds_url}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/booking",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBooking_id (URL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода",
+							"pm.test('Статус код 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"// Проверка неожиданных кодов состояния ",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; ",
+							"errorStatusCodes.forEach(function (statusCode) { ",
+							"    pm.test(`Статус код не ${statusCode}`, function () { ",
+							"        pm.response.to.not.have.status(statusCode); });",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/booking/{{new_id_url}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id_url}}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBooking (URL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода",
+							"pm.test('Статус код 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"",
+							"// Проверка неожиданных кодов состояния ",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; ",
+							"errorStatusCodes.forEach(function (statusCode) { ",
+							"    pm.test(`Статус код не ${statusCode}`, function () { ",
+							"        pm.response.to.not.have.status(statusCode); });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"pm.environment.set(\"firstname_url\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"pm.environment.set(\"lastname_url\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"pm.environment.set(\"totalprice_url\", pm.variables.replaceIn(\"{{$randomPrice}}\"));\r",
+							"pm.environment.set(\"depositpaid_url\", pm.variables.replaceIn(\"{{$randomBoolean}}\"));\r",
+							"pm.environment.set(\"checkin_url\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"checkout_url\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"pm.environment.set(\"additionalneeds_url\", pm.variables.replaceIn(\"{{$randomProduct}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"description": "передаю application/json тк формат payload не предполагает использование application/x-www-form-urlencoded (только application/json or text/xml)"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"description": "аналогично и с форматом response body (application/json или application/xml)"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstname",
+							"value": "{{firstname_url}}",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "{{lastname_url}}",
+							"type": "text"
+						},
+						{
+							"key": "totalprice",
+							"value": "{{totalprice_url}}",
+							"type": "text"
+						},
+						{
+							"key": "depositpaid",
+							"value": "{{depositpaid_url}}",
+							"type": "text"
+						},
+						{
+							"key": "bookingdates[checkin]",
+							"value": "{{checkin_url}}",
+							"type": "text"
+						},
+						{
+							"key": "bookingdates[checkout]",
+							"value": "{{checkout_url}}",
+							"type": "text"
+						},
+						{
+							"key": "additionalneeds",
+							"value": "{{additionalneeds_url}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/booking/{{new_id_url}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PartialUpdateBooking (URL)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода",
+							"pm.test('Статус код 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"",
+							"// Проверка неожиданных кодов состояния ",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; ",
+							"errorStatusCodes.forEach(function (statusCode) { ",
+							"    pm.test(`Статус код не ${statusCode}`, function () { ",
+							"        pm.response.to.not.have.status(statusCode); });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Задание значений переменных\r",
+							"//pm.environment.set(\"firstname_url\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"//pm.environment.set(\"lastname_url\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"//pm.environment.set(\"totalprice_url\", pm.variables.replaceIn(\"{{$randomPrice}}\"));\r",
+							"pm.environment.set(\"depositpaid_url\", pm.variables.replaceIn(\"{{$randomBoolean}}\"));\r",
+							"//pm.environment.set(\"checkin_url\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"//pm.environment.set(\"checkout_url\", pm.variables.replaceIn(\"{{$randomDateFuture}}\"));\r",
+							"//pm.environment.set(\"additionalneeds_url\", pm.variables.replaceIn(\"{{$randomProduct}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"description": "передаю application/json тк формат payload не предполагает использование application/x-www-form-urlencoded (только application/json or text/xml)"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"description": "аналогично и с форматом response body (application/json или application/xml)"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstname",
+							"value": "{{firstname_url}}",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "{{lastname_url}}",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "totalprice",
+							"value": "{{totalprice_url}}",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "depositpaid",
+							"value": "{{depositpaid_url}}",
+							"type": "text"
+						},
+						{
+							"key": "bookingdates[checkin]",
+							"value": "{{checkin_url}}",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "bookingdates[checkout]",
+							"value": "{{checkout_url}}",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "additionalneeds",
+							"value": "{{additionalneeds_url}}",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/booking/{{new_id_url}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"booking",
+						"{{new_id_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBooking (URL)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Проверка на корректность статус кода\r",
+							"pm.test('Статус код 201', function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"\r",
+							"\r",
+							"// Проверка неожиданных кодов состояния \r",
+							"const errorStatusCodes = [400, 401, 403, 404, 500]; \r",
+							"errorStatusCodes.forEach(function (statusCode) { \r",
+							"    pm.test(`Статус код не ${statusCode}`, function () { \r",
+							"        pm.response.to.not.have.status(statusCode); });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46cGFzc3dvcmQxMjM=",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{actual_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{new_id_url}}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{new_id_url}}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://restful-booker.herokuapp.com",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "new_id",
+			"value": 1094,
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "actual_token",
+			"value": "b2ca1f70f4516a8",
+			"disabled": true
+		},
+		{
+			"key": "firstname",
+			"value": "Maria",
+			"disabled": true
+		},
+		{
+			"key": "lastname",
+			"value": "Bychik",
+			"disabled": true
+		},
+		{
+			"key": "totalprice",
+			"value": 100,
+			"disabled": true
+		},
+		{
+			"key": "depositpaid",
+			"value": true,
+			"disabled": true
+		},
+		{
+			"key": "checkin",
+			"value": "2024-05-22",
+			"disabled": true
+		},
+		{
+			"key": "checkout",
+			"value": "2024-05-22",
+			"disabled": true
+		},
+		{
+			"key": "additionalneeds",
+			"value": "Lunch",
+			"disabled": true
+		},
+		{
+			"key": "new_id_url",
+			"value": 1113,
+			"disabled": true
+		}
+	]
+}
